@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>質問箱みたいなやつ</title>
+  <script>
+    function createQuestionPage() {
+      var question = document.getElementById('question').value;
+
+      // 質問内容が空でない場合にのみ新しいページを作成
+      if (question !== '') {
+        // 新しいページのURLを生成
+        var newPageUrl = 'question_' + Date.now() + '.html';
+
+        // 新しいページへのリンクを作成
+        var newPageLink = '<a href="' + newPageUrl + '">' + question + '</a>';
+
+        // ページ内に質問へのリンクを追加
+        document.getElementById('questions').innerHTML += newPageLink + '<br>';
+
+        // 新しいページを作成
+        var newPageContent = '<!DOCTYPE html><html><head><title>' + question + '</title></head><body><h1>' + question + '</h1></body></html>';
+        var newPageBlob = new Blob([newPageContent], {type: 'text/html'});
+        var newPageUrlObject = URL.createObjectURL(newPageBlob);
+        window.open(newPageUrlObject, '_blank');
+
+        // 質問内容をメールに送信する予定
+        var mailtoLink = 'mailto:mail@mailmail.example?subject=' + encodeURIComponent('新しい質問が届きましたよ！') + '&body=' + encodeURIComponent('質問内容: ' + question);
+        window.open(mailtoLink);
+      }
+
+      // 質問を削除する
+      document.getElementById('question').value = '';
+    }
+  </script>
+</head>
+<body>
+  <h1>質問箱みたいなやつ</h1>
+
+  <div>
+    <label for="question">質問を書いてね：</label>
+    <input type="text" id="question">
+    <button onclick="createQuestionPage()">質問を送信する！</button>
+  </div>
+
+  <div id="questions">
+    <!-- 質問へのリンクが追加される var newPageLinkに移行-->
+  </div>
+</body>
+</html>
